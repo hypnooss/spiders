@@ -49,7 +49,7 @@
       <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Entrar</button>
       <p class="text-sm text-gray-500 mt-4 text-center">Ainda não tem conta? <button onclick="toggleRegisterForm()" type="button" class="text-purple-500 hover:underline">Cadastre-se</button></p>
     </form>
-<div id="login-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+    <div id="login-error" class="hidden mt-4 text-sm border rounded-lg p-4 w-full max-w-sm text-left"></div>
 
     <form id="register-form" class="w-full max-w-sm space-y-4 hidden text-left">
       <div>
@@ -67,7 +67,7 @@
       <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Cadastrar</button>
       <p class="text-sm text-gray-500 mt-4 text-center">Já tem conta? <button onclick="toggleLoginForm()" type="button" class="text-purple-500 hover:underline">Entrar</button></p>
     </form>
-<div id="register-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+    <div id="register-error" class="hidden mt-4 text-sm border rounded-lg p-4 w-full max-w-sm text-left"></div>
 
     <form id="recovery-form" class="w-full max-w-sm space-y-4 hidden text-left">
       <div>
@@ -77,7 +77,7 @@
       <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Enviar link de recuperação</button>
       <p class="text-sm text-gray-500 mt-4 text-center">Lembrou a senha? <button onclick="toggleLoginForm()" type="button" class="text-purple-500 hover:underline">Entrar</button></p>
     </form>
-<div id="recovery-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+    <div id="recovery-error" class="hidden mt-4 text-sm border rounded-lg p-4 w-full max-w-sm text-left"></div>
   </main>
   <footer class="text-center text-gray-500 text-sm p-4">
     <a href="https://www.linkedin.com/in/nathanmansberger/" target="_blank" class="hover:text-purple-400">🕷️</a> Spiders is watching the surface...
@@ -89,6 +89,7 @@
       document.getElementById('login-form').classList.add('hidden');
       document.getElementById('register-form').classList.add('hidden');
       document.getElementById('recovery-form').classList.add('hidden');
+      clearMessages();
     }
 
     function toggleLoginForm() {
@@ -109,67 +110,161 @@
       document.getElementById('action-buttons').classList.add('hidden');
     }
 
-    // Integração com /login
-    const apiBase = "";
 
-    const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-
-      const response = await fetch(`${apiBase}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        alert('Login bem-sucedido! 🕷️');
-        localStorage.setItem('access_token', result.access_token);
-        // window.location.href = "/dashboard.html";
-      } else {
-        alert(`Erro no login: ${result.detail}`);
-      }
-    });
-
-  </script>
-
-<script>
-  function showMessage(id, message, type = "error") {
+// Garante que todos os placeholders de alerta estejam visíveis desde o carregamento
+window.addEventListener("DOMContentLoaded", () => {
+  ["login-error", "register-error", "recovery-error"].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
-      el.textContent = (type === "success" ? "✅ " : "⚠️ ") + message;
+      el.style.minHeight = "3.5rem";
+      el.style.height = "auto";
+      el.style.display = "flex";
+      el.style.alignItems = "center";
+      el.style.justifyContent = "space-between";
+      el.style.padding = "0.5rem 1rem";
+      el.style.visibility = "hidden";
+      el.style.opacity = "0";
+      el.style.transition = "opacity 0.5s ease";
       el.classList.remove("hidden");
-
-      el.classList.remove("bg-red-950", "text-red-300", "border-red-800");
-      el.classList.remove("bg-purple-900", "bg-opacity-30", "text-purple-200", "border-purple-600");
-      el.classList.remove("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
-
-      if (type === "error") {
-        el.classList.add("bg-red-950", "text-red-300", "border-red-800");
-      } else {
-        el.classList.add("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
-      }
+      el.style.position = "relative"; // garante que ocupe espaço e mantenha contexto local
     }
-  }
+  });
 
-  function clearMessages() {
-    ["login-error", "register-error", "recovery-error"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.classList.add("hidden");
-        el.textContent = "";
+  // Alinha os títulos principais verticalmente e padroniza espaçamentos
+  const logoBlock = document.querySelector("main > div.flex.items-center.space-x-3");
+  const subtitle = document.querySelector("main > p.text-lg");
+  const forms = document.querySelectorAll("form");
+
+  if (logoBlock && subtitle && forms.length > 0) {
+    const spacingBetweenTitleAndSubtitle = 4;
+    const spacingBetweenSubtitleAndForm = 8;
+
+    logoBlock.classList.remove("mb-4");
+    logoBlock.classList.add(`mb-${spacingBetweenTitleAndSubtitle}`);
+
+    subtitle.classList.remove("mb-8");
+    subtitle.classList.add(`mb-${spacingBetweenSubtitleAndForm}`);
+
+    const maxTopOffset = logoBlock.offsetTop;
+    forms.forEach(form => {
+      const parent = form.parentElement;
+      if (parent) {
+        parent.style.justifyContent = "flex-start";
+        parent.style.paddingTop = `${maxTopOffset}px`;
       }
     });
   }
+});
 
-  window.addEventListener("DOMContentLoaded", function () {
+function showMessage(id, message, type = "error") {
+  const el = document.getElementById(id);
+  if (el) {
+    const icon = type === "success" ? "✅" : "⚠️";
+    const closeBtn = '<button class="ml-4 text-lg leading-none font-bold focus:outline-none" onclick="this.parentElement.style.opacity=\'0\'; this.parentElement.style.visibility=\'hidden\'; this.parentElement.innerHTML=\'\';">×</button>';
+
+    el.innerHTML = `<span class="flex-1 ml-2">${icon} ${message}</span>${closeBtn}`;
+    el.style.visibility = "visible";
+    el.style.opacity = "1";
+    el.classList.add("cursor-pointer");
+
+    el.classList.remove("bg-red-950", "text-red-300", "border-red-800");
+    el.classList.remove("bg-purple-900", "bg-opacity-30", "text-purple-200", "border-purple-600");
+    el.classList.remove("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
+
+    if (type === "error") {
+      el.classList.add("bg-red-950", "text-red-300", "border-red-800");
+    } else {
+      el.classList.add("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
+    }
+
+    function hideAlert() {
+      el.style.opacity = "0";
+      el.style.visibility = "hidden";
+      setTimeout(() => {
+        el.innerHTML = "";
+        el.classList.remove("cursor-pointer");
+      }, 500);
+      el.removeEventListener("click", hideAlert);
+    }
+
+    el.addEventListener("click", hideAlert);
+    setTimeout(hideAlert, 10000);
+
+    const relatedInputs = el.closest("form")?.querySelectorAll("input");
+    if (relatedInputs) {
+      relatedInputs.forEach(input => {
+        input.addEventListener("input", hideAlert, { once: true });
+      });
+    }
+  }
+}
+
+function showInputInlineError(inputId, message) {
+  const map = {
+    "email": "login-error",
+    "password": "login-error",
+    "reg-email": "register-error",
+    "reg-password": "register-error",
+    "reg-confirm": "register-error",
+    "recovery-email": "recovery-error"
+  };
+  const targetId = map[inputId];
+  if (targetId) {
+    showMessage(targetId, message, "error");
+  }
+}
+
+["email", "reg-email", "recovery-email", "reg-password", "reg-confirm", "password"].forEach(id => {
+  const input = document.getElementById(id);
+  if (input) {
+    input.addEventListener("input", () => {
+      let isValid = input.checkValidity();
+
+      if (id === "reg-confirm") {
+        const pass = document.getElementById("reg-password").value;
+        isValid = isValid && input.value === pass;
+        if (input.value && input.value !== pass) {
+          showInputInlineError(id, "As senhas não coincidem.");
+        }
+      }
+
+      if (!isValid && input.validity && input.validity.typeMismatch) {
+        showInputInlineError(id, input.validationMessage);
+      }
+
+      if (!input.value.trim()) {
+        showInputInlineError(id, "Este campo é obrigatório.");
+      }
+
+      input.classList.toggle("border-red-500", !isValid);
+      input.classList.toggle("border-green-600", isValid);
+    });
+  }
+});
+
+
+    function clearMessages() {
+      ["login-error", "register-error", "recovery-error"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.add("hidden");
+          el.textContent = "";
+        }
+      });
+    }
+
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearMessages();
+      showMessage("login-error", "Erro! Login ainda não implementado.");
+    });
+
+    document.getElementById("recovery-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearMessages();
+      showMessage("recovery-error", "Sucesso! Recuperação de senha ainda não implementada.", "success");
+    });
+
     document.getElementById("register-form").addEventListener("submit", async function (e) {
       e.preventDefault();
       clearMessages();
@@ -198,49 +293,11 @@
         }
 
         showMessage("register-error", "Cadastro realizado com sucesso! 🕷️", "success");
-        toggleRegisterForm();
+        toggleLoginForm();
       } catch (error) {
         showMessage("register-error", "Erro de conexão com o servidor.");
       }
     });
-
-    document.getElementById("login-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      clearMessages();
-      showMessage("login-error", "Login efetuado: funcionalidade ainda não implementada.", "success");
-    });
-
-    
-document.getElementById("recovery-form").addEventListener("submit", async function (e) {
-  e.preventDefault();
-  clearMessages();
-
-  const email = document.getElementById("recovery-email").value;
-
-  try {
-    const response = await fetch("/api/recovery", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
-
-    await response.json(); // ignore return detail
-
-    showMessage("recovery-error", "Se este e-mail estiver registrado, enviaremos instruções.", "success");
-  } catch (error) {
-    showMessage("recovery-error", "Erro ao tentar iniciar recuperação.");
-  }
-});
-
-      e.preventDefault();
-      clearMessages();
-      showMessage("recovery-error", "Recuperação de senha efetuada: funcionalidade ainda não implementada.", "success");
-    });
-  });
-</script>
+  </script>
 </body>
-
 </html>
-
-
-

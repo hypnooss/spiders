@@ -4,33 +4,23 @@ import redis.asyncio as redis
 
 r = redis.Redis(host="redis", port=6379, decode_responses=True)
 
-DEFAULT_TTL = 900  # 15 minutos
-MAX_DELAY = 30     # segundos
-TRUSTED_TTL = 86400  # 24h
+DEFAULT_TTL = 900
+MAX_DELAY = 30
+TRUSTED_TTL = 86400
 
 async def get_delay(ip: str, email: str) -> int:
-    # Se IP for confiável, nenhum delay
     if await r.exists(f"trusted:{ip}"):
         return 0
 
-    ip_key = f"throttle:ip:{ip}"
-    email_key = f"throttle:email:{email}"
-
-    ip_count = await r.get(ip_key)
-    email_count = await r.get(email_key)
-
-    ip_count = int(ip_count) if ip_count else 0
-    email_count = int(email_count) if email_count else 0
-
-    worst = max(ip_count, email_count)
-    delay = min(2 ** (worst - 1), MAX_DELAY) if worst > 0 else 0
-
+    ip_count = int(await r.get(f"throttle:ip:{ip}") or 0)
+    email_count = int(await r.get(f"throttle:email:{email}") or 0)
+    delay = min(2 ** (max(ip_count, email_count) - 1), MAX_DELAY) if max(ip_count, email_count) > 0 else 0
     return delay
 
 async def apply_delay(ip: str, email: str):
     delay = await get_delay(ip, email)
     if delay > 0:
-        print(f"⏳ Delay aplicado para {ip} OU {email}: {delay}s")
+        print(f"⏳ Delay aplicado: {delay}s para IP={ip} ou EMAIL={email}")
         await asyncio.sleep(delay)
 
 async def penalize(ip: str, email: str):
@@ -41,4 +31,8 @@ async def penalize(ip: str, email: str):
 
 async def mark_ip_as_trusted(ip: str):
     await r.set(f"trusted:{ip}", "1", ex=TRUSTED_TTL)
+
+async def is_penalized(ip: str) -> bool:
+    delay = await get_delay(ip, "dummy@example.com")
+    return delay >= 8
 
