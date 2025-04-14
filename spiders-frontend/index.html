@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiders</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0e0e10;
+      color: #e5e5e5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #8b5cf6;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+  <main class="flex flex-col items-center justify-center text-center flex-grow p-6">
+    <div class="flex items-center space-x-3 mb-4">
+      <i data-lucide="bug" class="w-10 h-10 text-purple-500"></i>
+      <h1 class="text-4xl font-bold text-white">Spiders</h1>
+    </div>
+    <p class="text-lg text-gray-400 mb-8">Reconhecimento de superfície de ataque</p>
+    <div id="action-buttons" class="flex space-x-4 mb-8">
+      <button onclick="toggleLoginForm()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl shadow-md transition">Login</button>
+      <button onclick="toggleRegisterForm()" class="px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-2xl shadow-md transition">Cadastrar-se</button>
+    </div>
+
+    <form id="login-form" class="w-full max-w-sm space-y-4 hidden text-left">
+      <div>
+        <label for="email" class="block text-sm text-gray-400 mb-1">Email</label>
+        <input id="email" name="email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <div>
+        <label for="password" class="block text-sm text-gray-400 mb-1">Senha</label>
+        <input id="password" name="password" type="password" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <div class="flex items-center justify-between text-sm">
+        <label class="inline-flex items-center">
+          <input type="checkbox" class="form-checkbox text-purple-600 bg-gray-800 border-gray-600" />
+          <span class="ml-2 text-gray-400">Lembrar de mim</span>
+        </label>
+        <button type="button" onclick="toggleRecoveryForm()" class="text-purple-500 hover:underline">Esqueceu a senha?</button>
+      </div>
+      <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Entrar</button>
+      <p class="text-sm text-gray-500 mt-4 text-center">Ainda não tem conta? <button onclick="toggleRegisterForm()" type="button" class="text-purple-500 hover:underline">Cadastre-se</button></p>
+    </form>
+<div id="login-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+
+    <form id="register-form" class="w-full max-w-sm space-y-4 hidden text-left">
+      <div>
+        <label for="reg-email" class="block text-sm text-gray-400 mb-1">Email</label>
+        <input id="reg-email" name="email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <div>
+        <label for="reg-password" class="block text-sm text-gray-400 mb-1">Senha</label>
+        <input id="reg-password" name="password" type="password" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <div>
+        <label for="confirm-password" class="block text-sm text-gray-400 mb-1">Confirmar Senha</label>
+        <input id="reg-confirm" name="confirm-password" type="password" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Cadastrar</button>
+      <p class="text-sm text-gray-500 mt-4 text-center">Já tem conta? <button onclick="toggleLoginForm()" type="button" class="text-purple-500 hover:underline">Entrar</button></p>
+    </form>
+<div id="register-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+
+    <form id="recovery-form" class="w-full max-w-sm space-y-4 hidden text-left">
+      <div>
+        <label for="recovery-email" class="block text-sm text-gray-400 mb-1">Email cadastrado</label>
+        <input id="recovery-email" name="recovery-email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+      </div>
+      <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Enviar link de recuperação</button>
+      <p class="text-sm text-gray-500 mt-4 text-center">Lembrou a senha? <button onclick="toggleLoginForm()" type="button" class="text-purple-500 hover:underline">Entrar</button></p>
+    </form>
+<div id="recovery-error" class="hidden mt-4 text-sm bg-red-950 text-red-300 border border-red-800 rounded-lg p-4 w-full max-w-sm text-left"></div>
+  </main>
+  <footer class="text-center text-gray-500 text-sm p-4">
+    <a href="https://www.linkedin.com/in/nathanmansberger/" target="_blank" class="hover:text-purple-400">🕷️</a> Spiders is watching the surface...
+  </footer>
+  <script>
+    lucide.createIcons();
+
+    function hideAllForms() {
+      document.getElementById('login-form').classList.add('hidden');
+      document.getElementById('register-form').classList.add('hidden');
+      document.getElementById('recovery-form').classList.add('hidden');
+    }
+
+    function toggleLoginForm() {
+      hideAllForms();
+      document.getElementById('login-form').classList.remove('hidden');
+      document.getElementById('action-buttons').classList.add('hidden');
+    }
+
+    function toggleRegisterForm() {
+      hideAllForms();
+      document.getElementById('register-form').classList.remove('hidden');
+      document.getElementById('action-buttons').classList.add('hidden');
+    }
+
+    function toggleRecoveryForm() {
+      hideAllForms();
+      document.getElementById('recovery-form').classList.remove('hidden');
+      document.getElementById('action-buttons').classList.add('hidden');
+    }
+
+    // Integração com /login
+    const apiBase = "";
+
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const response = await fetch(`${apiBase}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert('Login bem-sucedido! 🕷️');
+        localStorage.setItem('access_token', result.access_token);
+        // window.location.href = "/dashboard.html";
+      } else {
+        alert(`Erro no login: ${result.detail}`);
+      }
+    });
+
+  </script>
+
+<script>
+  function showMessage(id, message, type = "error") {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = (type === "success" ? "✅ " : "⚠️ ") + message;
+      el.classList.remove("hidden");
+
+      el.classList.remove("bg-red-950", "text-red-300", "border-red-800");
+      el.classList.remove("bg-purple-900", "bg-opacity-30", "text-purple-200", "border-purple-600");
+      el.classList.remove("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
+
+      if (type === "error") {
+        el.classList.add("bg-red-950", "text-red-300", "border-red-800");
+      } else {
+        el.classList.add("bg-green-900", "bg-opacity-30", "text-green-300", "border-green-600");
+      }
+    }
+  }
+
+  function clearMessages() {
+    ["login-error", "register-error", "recovery-error"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add("hidden");
+        el.textContent = "";
+      }
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("register-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      clearMessages();
+
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
+      const confirm = document.getElementById("reg-confirm").value;
+
+      if (password !== confirm) {
+        showMessage("register-error", "As senhas não coincidem.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          showMessage("register-error", result.detail || "Erro ao registrar.");
+          return;
+        }
+
+        showMessage("register-error", "Cadastro realizado com sucesso! 🕷️", "success");
+        toggleRegisterForm();
+      } catch (error) {
+        showMessage("register-error", "Erro de conexão com o servidor.");
+      }
+    });
+
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      clearMessages();
+      showMessage("login-error", "Login efetuado: funcionalidade ainda não implementada.", "success");
+    });
+
+    
+document.getElementById("recovery-form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  clearMessages();
+
+  const email = document.getElementById("recovery-email").value;
+
+  try {
+    const response = await fetch("/api/recovery", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    await response.json(); // ignore return detail
+
+    showMessage("recovery-error", "Se este e-mail estiver registrado, enviaremos instruções.", "success");
+  } catch (error) {
+    showMessage("recovery-error", "Erro ao tentar iniciar recuperação.");
+  }
+});
+
+      e.preventDefault();
+      clearMessages();
+      showMessage("recovery-error", "Recuperação de senha efetuada: funcionalidade ainda não implementada.", "success");
+    });
+  });
+</script>
+</body>
+
+</html>
+
+
+

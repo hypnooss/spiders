@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: spiders
+      POSTGRES_PASSWORD: spiders123
+      POSTGRES_DB: spiders_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    working_dir: /app
+
+  redis:
+    image: redis:7
+    container_name: spiders-redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
+
