@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiders</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .alert-placeholder {
+      min-height: 3.5rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .alert-visible {
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    .alert-error {
+      color: ##9ca3af;
+      border: 1px solid #374151;
+      background-color: rgba(31, 41, 55, 0.7);"  // Tailwind gray-800
+    }
+    .alert-warning {
+      color: #9ca3af;
+      border: 1px solid #374151;
+      background-color: rgba(31, 41, 55, 0.7);"  // Tailwind gray-800
+    }
+    .alert-success {
+      color: #6ee7b7;
+      border: 1px solid #10b981;
+      background-color: rgba(6, 78, 59, 0.2);
+    }
+    .field-error {
+      border-color: #374151 !important;
+    }
+    .field-success {
+      border-color: #10b981 !important;
+    }
+    input:focus {
+      outline: none;
+      border-color: #a855f7 !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-black text-white">
+<script>
+  async function checkThrottleStatus() {
+    try {
+      const res = await fetch('/api/throttle-status');
+      const data = await res.json();
+
+      if (data?.delay >= 8) {
+        const pages = ['inicio', 'login', 'cadastro', 'recuperacao'];
+        pages.forEach(p => {
+          const el = document.getElementById('page-' + p);
+          if (el) el.classList.add('hidden');
+        });
+
+        const blocked = document.getElementById('page-bloqueado');
+        if (blocked) blocked.classList.remove('hidden');
+      }
+    } catch (err) {
+      console.warn('Erro ao verificar throttle:', err);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', checkThrottleStatus);
+</script>
+  <!-- TOPO -->
+  <header class="w-full bg-transparent flex flex-col items-center">
+    <div class="mt-64 flex flex-col items-center">
+      <div class="flex items-center space-x-3 mb-3">
+        <i data-lucide="bug" class="w-10 h-10 text-purple-500"></i>
+        <h1 class="text-4xl font-bold">Spiders</h1>
+      </div>
+      <p class="text-lg text-purple-100 mb-8">Reconhecimento de superfície de ataque</p>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO CENTRAL -->
+  <main class="w-full flex-grow flex items-start justify-center">
+    <div class="w-full max-w-sm">
+      <!-- PÁGINAS -->
+      <div id="page-inicio" class="space-y-6 mt-8">
+        <div class="flex justify-center space-x-4">
+          <button onclick="showPage('login')" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl shadow-md transition">Login</button>
+          <button onclick="showPage('cadastro')" class="px-6 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-2xl shadow-md transition">Cadastrar-se</button>
+        </div>
+      </div>
+
+      <div id="page-login" class="hidden space-y-4 mt-8">
+        <form id="login-form" novalidate class="space-y-4">
+          <div>
+            <label class="block text-sm text-white mb-1">Email</label>
+            <input id="email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <div>
+            <label class="block text-sm text-white mb-1">Senha</label>
+            <input id="password" type="password" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <label class="inline-flex items-center">
+              <input type="checkbox" class="form-checkbox text-purple-600 bg-gray-800 border-gray-600" />
+              <span class="ml-2 text-white">Lembrar de mim</span>
+            </label>
+            <button type="button" onclick="showPage('recuperacao')" class="text-purple-500 hover:underline">Esqueceu a senha?</button>
+          </div>
+          <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Entrar</button>
+        </form>
+        <p class="text-sm text-white text-center">Ainda não tem conta? <button onclick="showPage('cadastro')" class="text-purple-500 hover:underline">Cadastre-se</button></p>
+        <div id="login-error" class="alert-placeholder text-sm rounded-lg p-4 fade-alert"></div>
+      </div>
+
+      <div id="page-cadastro" class="hidden space-y-4 mt-8">
+        <form id="register-form" novalidate class="space-y-4">
+          <div>
+            <label class="block text-sm text-white mb-1">Email</label>
+            <input id="reg-email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <div>
+            <label class="block text-sm text-white mb-1">Senha</label>
+            <input id="reg-password" type="password" required minlength="6" class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <div>
+            <label class="block text-sm text-white mb-1">Confirmar Senha</label>
+            <input id="reg-confirm" type="password" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Cadastrar</button>
+        </form>
+        <p class="text-sm text-white text-center">Já tem conta? <button onclick="showPage('login')" class="text-purple-500 hover:underline">Entrar</button></p>
+        <div id="register-error" class="alert-placeholder text-sm rounded-lg p-4 fade-alert"></div>
+      </div>
+
+      <div id="page-recuperacao" class="hidden space-y-4 mt-8">
+        <form id="recovery-form" novalidate class="space-y-4">
+          <div>
+            <label class="block text-sm text-white mb-1">Email cadastrado</label>
+            <input id="recovery-email" type="email" required class="w-full px-4 py-2 rounded-md bg-gray-800 text-white border border-gray-700" />
+          </div>
+          <button type="submit" class="w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow-md transition">Enviar link de recuperação</button>
+        </form>
+        <p class="text-sm text-white text-center">Lembrou a senha? <button onclick="showPage('login')" class="text-purple-500 hover:underline">Entrar</button></p>
+        <div id="recovery-error" class="alert-placeholder text-sm rounded-lg p-4 fade-alert"></div>
+      </div>
+      <div id="page-bloqueado" class="hidden space-y-6 mt-8 text-center">
+      <div class="text-sm text-gray-400 border border-gray-700"
+           style="background-color: rgba(31, 41, 55, 0.7); padding: 1.5rem; border-radius: 0.5rem;">
+        Este formulário foi desativado devido a muitas tentativas sem sucesso.<br>
+    Por favor, aguarde alguns instantes antes de tentar novamente.
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="fixed bottom-0 w-full text-center text-gray-500 text-sm py-3 bg-transparent">
+    <a href="https://www.linkedin.com/in/nathanmansberger/" target="_blank" class="hover:text-purple-400">🕷️</a> Spiders is watching the surface...
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script>
+    lucide.createIcons();
+
+    function showPage(page) {
+      const pages = ['inicio', 'login', 'cadastro', 'recuperacao'];
+      pages.forEach(p => {
+        const el = document.getElementById('page-' + p);
+        if (el) el.classList.add('hidden');
+      });
+      const current = document.getElementById('page-' + page);
+      if (current) current.classList.remove('hidden');
+    }
+
+
+    function showInlineError(id, message, type = 'error') {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = message;
+        el.classList.add('alert-visible');
+        el.classList.remove('alert-error', 'alert-warning', 'alert-success');
+        el.classList.add('alert-' + type);
+      }
+    }
+
+    function clearInlineError(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = '';
+        el.classList.remove('alert-visible', 'alert-error', 'alert-warning', 'alert-success');
+      }
+    }
+
+    const inputMap = [
+      { input: 'email', error: 'login-error' },
+      { input: 'password', error: 'login-error' },
+      { input: 'reg-email', error: 'register-error' },
+      { input: 'reg-password', error: 'register-error' },
+      { input: 'reg-confirm', error: 'register-error' },
+      { input: 'recovery-email', error: 'recovery-error' },
+    ];
+
+    inputMap.forEach(({ input, error }) => {
+      const el = document.getElementById(input);
+      if (!el) return;
+
+      el.addEventListener('input', () => {
+        const value = el.value.trim();
+        let valid = el.checkValidity();
+
+        if (!value) {
+          showInlineError(error, '❌ Este campo é obrigatório.', 'error');
+          el.classList.add('field-error');
+          el.classList.remove('field-success', 'field-warning');
+        } else if (!valid) {
+          showInlineError(error, '⚠️ ' + el.validationMessage, 'warning');
+          el.classList.add('field-warning');
+          el.classList.remove('field-success', 'field-error');
+        } else {
+          if (input === 'reg-confirm') {
+            const pass = document.getElementById('reg-password').value;
+            if (value !== pass) {
+              showInlineError(error, '⚠️ As senhas não coincidem.', 'warning');
+              el.classList.add('field-warning');
+              el.classList.remove('field-success', 'field-error');
+              return;
+            }
+          }
+          el.classList.remove('field-error', 'field-warning');
+          el.classList.add('field-success');
+
+          const relatedInputs = inputMap.filter(i => i.error === error);
+          const hasOtherInvalid = relatedInputs.some(({ input: otherId }) => {
+            const other = document.getElementById(otherId);
+            return other && !other.checkValidity();
+          });
+          if (!hasOtherInvalid) clearInlineError(error);
+        }
+      });
+    });
+    
+    document.querySelectorAll('.fade-up').forEach((el, i) => {
+      el.style.animationDelay = `${i * 0.1 + 0.2}s`;
+    });
+  </script>
+</body>
+</html>
+
