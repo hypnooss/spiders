@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmação - Spiders Security Suite</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/theme.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="relative min-h-screen bg-gray-900 text-white theme-transition flex flex-col justify-center items-center text-center px-6">
+  <div class="glow-overlay"></div>
+  <div class="network-bg"></div>
+
+  <div class="z-10">
+    <h1 id="confirm-title" class="text-4xl md:text-5xl font-bold mb-4">✅ Cadastro realizado com sucesso</h1>
+    <p id="confirm-message" class="text-lg text-gray-300 mb-6">Enviamos um link de confirmação para o seu e-mail.</p>
+    <p class="text-sm text-gray-500 mb-10">Você será redirecionado automaticamente em <span id="timer" class="text-green-400 font-semibold">15</span> segundos...</p>
+    <a href="index.html" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded transition">Ir para login</a>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Verificar o parâmetro 'status' na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const titleEl = document.getElementById('confirm-title');
+    const messageEl = document.getElementById('confirm-message');
+
+    if (status === 'activated') {
+      titleEl.textContent = '✅ Conta ativada com sucesso';
+      messageEl.textContent = 'Sua conta foi ativada. Você pode agora fazer login.';
+    }
+
+    // Temporizador de redirecionamento
+    let seconds = 15;
+    const timerEl = document.getElementById('timer');
+    const interval = setInterval(() => {
+      seconds--;
+      timerEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

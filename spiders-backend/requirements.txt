@@ -3,7 +3,9 @@ uvicorn[standard]
 sqlalchemy
 psycopg2-binary
 python-jose[cryptography]
-passlib[bcrypt]
+bcrypt>=4.0.1
+passlib[bcrypt]>=1.7.4
 email-validator
 python-dotenv
+python-multipart
 redis

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spiders</title>
+  <meta http-equiv="refresh" content="10;url=/" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-black text-white">
+  <script src="js/throttle.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- TOPO -->
+  <header class="w-full bg-transparent flex flex-col items-center">
+    <button id="theme-toggle" onclick="toggleTheme()" class="absolute top-4 right-4 z-50">🌞</button>
+    <div class="mt-64 flex flex-col items-center">
+      <div class="flex items-center space-x-3 mb-3">
+        <i data-lucide="bug" class="w-10 h-10 text-purple-500"></i>
+        <h1 class="text-4xl font-bold">Spiders</h1>
+      </div>
+      <p class="text-lg text-purple-100 mb-8">Reconhecimento de superfície de ataque</p>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO CENTRAL -->
+  <main class="w-full flex-grow flex items-start justify-center">
+    <div class="w-full max-w-sm">
+      <div class="bg-slate-800 px-6 py-8 rounded-2xl shadow-lg max-w-md w-full border border-slate-600 fade-in">
+        <h2 class="text-xl font-semibold text-green-400 mb-4">✅ Conta ativada com sucesso</h2>
+        <p class="mb-4 text-slate-300">Você será redirecionado automaticamente para a página de login em <span id="contador" class="font-mono">10</span> segundos.</p>
+        <a href="/" class="inline-block mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md transition">Ir para o login agora</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer class="fixed bottom-0 w-full text-center text-gray-500 text-sm py-3 bg-transparent">
+    <a href="https://www.linkedin.com/in/nathanmansberger/" target="_blank" class="hover:text-purple-400">🕷️</a> Spiders is watching the surface...
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script>
+    lucide.createIcons();
+    let counter = 10;
+    const el = document.getElementById('contador');
+    const timer = setInterval(() => {
+      counter--;
+      if (counter <= 0) {
+        clearInterval(timer);
+        window.location.href = "/";
+      } else {
+        el.textContent = counter;
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
+

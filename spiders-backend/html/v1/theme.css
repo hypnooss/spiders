@@ -1,0 +1,127 @@
+/* css/theme.css */
+
+:root {
+  --accent: #8b5cf6;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --success: #10b981;
+}
+
+/* ALERTAS */
+.alert-placeholder {
+  min-height: 3.5rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.alert-visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.alert-error {
+  color: #9ca3af;
+  border: 1px solid #374151;
+  background-color: rgba(31, 41, 55, 0.7);
+}
+.alert-warning {
+  color: #9ca3af;
+  border: 1px solid #374151;
+  background-color: rgba(31, 41, 55, 0.7);
+}
+.alert-success {
+  color: #6ee7b7;
+  border: 1px solid var(--success);
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+.field-error {
+  border-color: #ef4444 !important;
+}
+.field-success {
+  border-color: #10b981 !important;
+}
+
+.light-mode input.field-success {
+  border: 1px solid #15803d !important;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent) !important;
+}
+
+/* ====== LIGHT MODE ====== */
+.light-mode {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.light-mode input,
+.light-mode .form-checkbox,
+.light-mode textarea,
+.light-mode select {
+  background-color: #ffffff;
+  color: #1f2937;
+  border-color: #cbd5e1;
+}
+
+.light-mode .text-white {
+  color: #1f2937 !important;
+}
+
+.light-mode .text-purple-100 {
+  color: #6b7280 !important;
+}
+
+.light-mode .text-purple-500,
+.light-mode .text-purple-600,
+.light-mode .hover\:text-purple-400 {
+  color: var(--accent) !important;
+}
+
+.light-mode .bg-gray-700,
+.light-mode .bg-gray-800,
+.light-mode .bg-black {
+  background-color: #f9fafb !important;
+}
+
+.light-mode .border-gray-700,
+.light-mode .border-gray-800 {
+  border-color: #d1d5db !important;
+}
+
+.light-mode .bg-purple-600 {
+  background-color: var(--accent) !important;
+}
+.light-mode .hover\:bg-purple-700:hover {
+  background-color: #7c3aed !important;
+}
+
+.light-mode .alert-error,
+.light-mode .alert-warning {
+  background-color: #f0f0f0;
+  color: #4b5563;
+  border-color: #d1d5db;
+}
+
+.light-mode .alert-success {
+  color: #059669;
+  border-color: #34d399;
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+.light-mode input:focus {
+  border-color: var(--accent) !important;
+  background-color: #fff;
+}
+
+/* BOTÃO DE TEMA FIXO */
+#theme-toggle {
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+#theme-toggle:hover {
+  filter: brightness(1.2);
+}

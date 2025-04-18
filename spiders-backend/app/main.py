@@ -1,15 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from database import engine
 import models
 from auth import router as auth_router
-from fastapi import Request
 from throttle import get_delay
 
 app = FastAPI(title="Spiders API")
 
 # Cria as tabelas no banco (modo simples por enquanto)
 models.Base.metadata.create_all(bind=engine)
-app.include_router(auth_router)
+
+# Inclui as rotas com prefixo /api
+app.include_router(auth_router, prefix="/api")
 
 @app.get("/")
 def read_root():
@@ -25,3 +26,4 @@ async def throttle_status(request: Request):
         "client_ip": client_ip,
         "source": "x-forwarded-for" if forwarded else "request.client.host"
     }
+
