@@ -1,128 +1,51 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Metadados e configurações básicas -->
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Spiders Security Suite</title>
-  <!-- Tailwind CSS via CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
-  <!-- Lucide Icons via CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Estilos personalizados (fundo e transições) -->
   <link href="./css/theme.css" rel="stylesheet"/>
 </head>
 <body class="relative min-h-screen theme-transition">
+
   <!-- Elementos de fundo -->
   <div class="glow-overlay"></div>
   <div class="network-bg"></div>
 
   <!-- Botões no canto superior direito -->
-  <div class="absolute top-6 right-6 z-50 flex space-x-4">
-    <button class="bg-purple-700 hover:bg-purple-800 text-white font-semibold px-4 py-2 rounded-md transition">Login</button>
-    <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition">Cadastrar-se</button>
+    <div class="absolute top-6 right-6 z-50 flex space-x-4">
+    <button class="bg-purple-700 hover:bg-purple-800 text-white font-semibold px-4 py-2 rounded-md transition" id="btn-login">Login</button>
+    <button class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition" id="btn-register">Cadastrar-se</button>
   </div>
 
   <!-- Conteúdo principal -->
   <main class="relative z-10 flex flex-col items-center justify-center text-center px-6 h-screen">
-    <!-- Frase central (hero) -->
-    <div class="fade-in transition-all duration-700" id="hero-text">
-      <h2 class="text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-xl">Observe. Analise. Proteja.</h2>
-    </div>
-
-    <!-- Formulário de Cadastro -->
-    <div class="hidden w-full max-w-sm mt-8 bg-gray-800 p-5 rounded-lg shadow-2xl opacity-0 scale-95 transition-all duration-700" id="register-container">
-      <form class="space-y-4">
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="email" name="email" placeholder="E-mail" required="" type="email"/>
-          <label class="floating-label" for="email">
-            E-mail
-          </label>
-        </div>
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="senha" name="senha" placeholder="Senha" required="" type="password"/>
-          <label class="floating-label" for="senha">
-            Senha
-          </label>
-        </div>
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="confirmar" name="confirmar" placeholder="Confirmar senha" required="" type="password"/>
-          <label class="floating-label" for="confirmar">
-            Confirmar senha
-          </label>
-        </div>
-        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded transition" type="submit">Cadastrar</button>
-        <p class="text-sm text-center text-gray-300">Já tem conta? <a class="text-green-500 hover:underline" href="#" id="link-to-login-from-register">Entrar</a></p>
-        <p class="text-sm text-red-400 text-center opacity-0 transition-opacity duration-300 h-[20px] select-none cursor-pointer alert-persistente" id="cadastro-alert"></p>
-      </form>
-    </div>
-
-    <!-- Formulário de Login -->
-    <div class="hidden w-full max-w-sm mt-8 bg-gray-800 p-5 rounded-lg shadow-2xl opacity-0 scale-95 transition-all duration-700" id="login-container">
-      <form class="space-y-4">
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="login-email" name="login-email" placeholder="E-mail" required="" type="email"/>
-          <label class="floating-label" for="login-email">
-            E-mail
-          </label>
-        </div>
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="login-senha" name="login-senha" placeholder="Senha" required="" type="password"/>
-          <label class="floating-label" for="login-senha">
-            Senha
-          </label>
-        </div>
-        <div class="flex justify-between text-sm text-gray-400 px-1">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input class="form-checkbox text-green-500 focus:ring-gray-500" type="checkbox"/>
-            Lembrar de mim
-          </label>
-          <a class="text-green-500 hover:underline" href="#" id="link-to-recovery-from-login">Esqueceu a senha?</a>
-        </div>
-        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded transition" type="submit">Entrar</button>
-        <p class="text-sm text-center text-gray-300">Ainda não tem conta? <a class="text-green-500 hover:underline" href="#" id="link-to-register-from-login">Cadastre-se</a></p>
-        <p class="text-sm text-red-400 text-center opacity-0 transition-opacity duration-300 h-[20px] select-none cursor-pointer alert-persistente" id="login-alert"></p>
-      </form>
-    </div>
-
-    <!-- Formulário de Recuperar Senha -->
-    <div class="hidden w-full max-w-sm mt-8 bg-gray-800 p-5 rounded-lg shadow-2xl opacity-0 scale-95 transition-all duration-700" id="recovery-container">
-      <form class="space-y-4">
-        <div class="relative">
-          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="recovery-email" name="recovery-email" placeholder="E-mail" required="" type="email"/>
-          <label class="floating-label" for="recovery-email">E-mail</label>
-        </div>
-        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded transition" type="submit">Recuperar Senha</button>
-        <p class="text-sm text-center text-gray-300">Lembrou sua senha? <a class="text-green-500 hover:underline" href="#" id="link-to-login-from-recovery">Entrar</a></p>
-        <p class="text-sm text-red-400 text-center opacity-0 transition-opacity duration-300 h-[20px] select-none cursor-pointer alert-persistente" id="recovery-alert"></p>
-      </form>
-    </div>
+    <!-- Conteúdo carregado aqui -->
   </main>
 
   <!-- Rodapé com ícones e exibição do IP -->
   <footer class="z-20 text-gray-400 text-sm py-4 px-6 flex justify-end items-center space-x-4">
+    <div class="icon-button" id="recaptcha-icon" style="display: none;">
+      <i data-lucide="shield-check" class="w-5 h-5 text-green-400"></i>
+      <span id="recaptcha-tooltip">Verificação</span>
+    </div>
     <div class="icon-button">
       <i data-lucide="server" class="w-5 h-5 cursor-pointer"></i>
       <span id="ip-tooltip">IP</span>
     </div>
     <div class="icon-button">
-      <i data-lucide="x" class="w-5 h-5 cursor-pointer"></i>
-      <span>X</span>
-    </div>
-    <div class="icon-button">
+      <a href="https://www.linkedin.com/in/nathanmansberger/" target="_blank" rel="noopener noreferrer" class="icon-button no-style">
       <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer"></i>
       <span>LinkedIn</span>
+      </a>
     </div>
     <div class="icon-button">
+      <a href="https://github.com/hypnooss/spiders" target="_blank" rel="noopener noreferrer" class="icon-button no-style">
       <i data-lucide="github" class="w-5 h-5 cursor-pointer"></i>
       <span>GitHub</span>
-    </div>
-    <div class="icon-button">
-      <i data-lucide="slack" class="w-5 h-5 cursor-pointer"></i>
-      <span>Slack</span>
-    </div>
-    <div class="icon-button">
-      <i data-lucide="chrome" class="w-5 h-5 cursor-pointer"></i>
-      <span>Google</span>
+      </a>
     </div>
     <div class="icon-button">
       <i data-lucide="globe" class="w-5 h-5 cursor-pointer"></i>
@@ -134,44 +57,10 @@
     </div>
   </footer>
 
-  <!-- Script principal -->
-  <script src="./js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
+
   <!-- Inicialização dos ícones Lucide -->
-  <script>
-    lucide.createIcons();
-  </script>
-  <!-- Script de segurança Cloudflare -->
-  <script>
-    (function(){
-      function c(){
-        var b = a.contentDocument || a.contentWindow.document;
-        if(b){
-          var d = b.createElement('script');
-          d.innerHTML = "window.__CF$cv$params={r:'9318271f9cc4dd19',t:'MTc0NDg1MzM4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
-          b.getElementsByTagName('head')[0].appendChild(d);
-        }
-      }
-      if(document.body){
-        var a = document.createElement('iframe');
-        a.height = 1;
-        a.width = 1;
-        a.style.position = 'absolute';
-        a.style.top = 0;
-        a.style.left = 0;
-        a.style.border = 'none';
-        a.style.visibility = 'hidden';
-        document.body.appendChild(a);
-        if('loading' !== document.readyState) c();
-        else if(window.addEventListener) document.addEventListener('DOMContentLoaded', c);
-        else{
-          var e = document.onreadystatechange || function(){};
-          document.onreadystatechange = function(b){
-            e(b);
-            'loading' !== document.readyState && (document.onreadystatechange = e, c());
-          }
-        }
-      }
-    })();
-  </script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
+

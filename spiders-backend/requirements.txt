@@ -9,3 +9,4 @@ email-validator
 python-dotenv
 python-multipart
 redis
+httpx

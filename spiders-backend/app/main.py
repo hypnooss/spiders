@@ -1,8 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Body
 from database import engine
 import models
 from auth import router as auth_router
 from throttle import get_delay
+from fastapi.staticfiles import StaticFiles
+import os
+from config import RECAPTCHA_ENABLED
+import httpx
 
 app = FastAPI(title="Spiders API")
 
@@ -26,4 +30,32 @@ async def throttle_status(request: Request):
         "client_ip": client_ip,
         "source": "x-forwarded-for" if forwarded else "request.client.host"
     }
+
+@app.post("/api/verificar-recaptcha")
+async def verificar_recaptcha(data: dict = Body(...)):
+    if not RECAPTCHA_ENABLED:
+        # Modo simulado
+        return {"success": True, "score": 0.91, "simulated": True}
+
+    token = data.get("token")
+    if not token:
+        return {"success": False}
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://www.google.com/recaptcha/api/siteverify",
+            data={
+                "secret": os.getenv("RECAPTCHA_SECRET"),
+                "response": token
+            }
+        )
+    result = response.json()
+    return {
+        "success": result.get("success", False),
+        "score": result.get("score", 0.0),
+        "action": result.get("action", "")
+    }
+
+# Monta a pasta de arquivos estáticos (html, js, css)
+app.mount("/", StaticFiles(directory="/html", html=True), name="static")
 

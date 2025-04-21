@@ -12,6 +12,7 @@ from config import ACTIVATION_BASE_URL
 from fastapi.responses import HTMLResponse
 import os
 from pathlib import Path
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 
@@ -168,36 +169,38 @@ async def verify_mfa(data: schemas.MFARequest, request: Request, db: Session = D
 
     return {"access_token": token, "token_type": "bearer"}
 
+from fastapi.responses import RedirectResponse
+
 @router.get("/activate")
 async def activate_account(token: str, db: Session = Depends(get_db)):
     try:
         activation_token = db.query(models.ActivationToken).filter(models.ActivationToken.token == token).first()
         if not activation_token:
-            raise HTTPException(status_code=400, detail="Token inválido ou expirado")
+            return RedirectResponse("/index.html#activated?status=invalid", status_code=302)
 
         if activation_token.used:
-            raise HTTPException(status_code=400, detail="Token já foi usado")
+            return RedirectResponse("/index.html#activated?status=used", status_code=302)
 
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
         action = payload.get("action")
 
         if action != "activate" or not email:
-            raise HTTPException(status_code=400, detail="Token inválido ou ação incorreta")
+            return RedirectResponse("/index.html#activated?status=invalid", status_code=302)
 
         user = db.query(models.User).filter(models.User.email == email).first()
         if not user:
-            raise HTTPException(status_code=404, detail="Usuário não encontrado")
+            return RedirectResponse("/index.html#activated?status=invalid", status_code=302)
 
         user.is_active = True
         activation_token.used = True
         db.commit()
 
         print(f"[ACTIVATE] ✅ Conta ativada: {email}")
-
-        return Response(status_code=302, headers={"Location": "/confirm.html?status=activated"})
+        return RedirectResponse("/index.html#activated?status=activated", status_code=302)
 
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=400, detail="Token expirado")
+        return RedirectResponse("/index.html#activated?status=invalid", status_code=302)
     except jwt.JWTError:
-        raise HTTPException(status_code=400, detail="Token inválido")
+        return RedirectResponse("/index.html#activated?status=invalid", status_code=302)
+

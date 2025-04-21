@@ -1,0 +1,26 @@
+<!-- Formulário de Cadastro -->
+    <div class="hidden w-full max-w-sm mt-8 bg-gray-800 p-5 rounded-lg shadow-2xl opacity-0 scale-95 transition-all duration-700" id="register-container">
+      <form class="space-y-4">
+        <div class="relative">
+          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="email" name="email" placeholder="E-mail" required="" type="email"/>
+          <label class="floating-label" for="email">
+            E-mail
+          </label>
+        </div>
+        <div class="relative">
+          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="senha" name="senha" placeholder="Senha" required="" type="password"/>
+          <label class="floating-label" for="senha">
+            Senha
+          </label>
+        </div>
+        <div class="relative">
+          <input class="peer w-full px-4 pt-6 pb-2 bg-gray-900 border border-gray-700 text-white rounded placeholder-transparent focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all" id="confirmar" name="confirmar" placeholder="Confirmar senha" required="" type="password"/>
+          <label class="floating-label" for="confirmar">
+            Confirmar senha
+          </label>
+        </div>
+        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded transition" type="submit">Cadastrar</button>
+        <p class="text-sm text-center text-gray-300">Já tem conta? <a class="text-green-500 hover:underline" href="#" id="link-to-login-from-register">Entrar</a></p>
+        <p class="text-sm text-red-400 text-center opacity-0 transition-opacity duration-300 h-[20px] select-none cursor-pointer alert-persistente" id="register-alert"></p>
+      </form>
+    </div>
